@@ -1,22 +1,20 @@
 
-
 const express = require('express');
 const {sequelize, User, Post} = require('./models');
-
-
 const app = express();
-
 app.use(express.json());
 
 
 // ------------------------------------------------------------------------------------------------
+
 app.get ('/', (req, res, next) => {
-    res.json({message: "Welcome to Tutorial Application !"})
+    res.json({message: "Welcome to Sequelize-cli Tutorial !"})
   });
   
 
 // ------------------------------------------------------------------------------------------------
-app.post('/users', async (req,res)=> {
+
+app.post('/users', async (req, res)=> {
     const { name, email, role } = req.body;
 
     try {
@@ -26,13 +24,13 @@ app.post('/users', async (req,res)=> {
         return res.json(user);
     } catch (err) {
         console.log(err);
-        return res.status(400).json(err)
+        return res.status(500).json(err)
     }
 })
 
 //  ----------------------------------------------------------------------------------------------
 
-app.get('/users', async (req,res)=> {
+app.get('/users', async (req, res)=> {
 
     try {
         const users = await User.findAll();
@@ -62,8 +60,8 @@ app.get('/users', async (req,res)=> {
 // ---------
 
 app.get('/users/:uuid', async (req,res)=> {
-    const uuid= req.params.uuid
 
+    const uuid= req.params.uuid
     try {
         const user = await User.findOne({ 
             where: {uuid},
@@ -96,7 +94,7 @@ app.get('/users/:uuid', async (req,res)=> {
 
 // ------------------------------------------------------------------------------------------------
 
-app.post('/posts', async (req,res)=> {
+app.post('/posts', async (req, res)=> {
 
     const { userUuid, content} = req.body
     try {
@@ -106,7 +104,6 @@ app.post('/posts', async (req,res)=> {
     } catch (err) {
         console.log(err)
         return res.status(400).json(err);
-        
     }
     
 })
@@ -183,14 +180,11 @@ app.put('/users/:uuid', async (req,res)=> {
     const { name, email, role} = req.body
     try {
         const user = await User.findOne( { where: {uuid} })
-
         user.name = name;
         user.email = email;
         user.role = role;
 
         await user.save()
-
-
 
         return res.json(user);
     } catch (err) {
@@ -202,9 +196,7 @@ app.put('/users/:uuid', async (req,res)=> {
 
 // ------------------------------------------------------------------------------------------------
 
-
-
-app.listen({port: 5000}, async() => {
+app.listen( { port: 5000 }, async() => {
     console.log('Serve runnning on http://localhost:5000');
     // await sequelize.sync( {force:true});
     // await sequelize.sync( {});
@@ -213,8 +205,8 @@ app.listen({port: 5000}, async() => {
 })
 
 
-// async function main () {
-//     // await sequelize.sync();
-//     await sequelize.sync( {force:true});
-// }
-// main();
+async function main () {
+    await sequelize.sync();
+    // await sequelize.sync( {force:true});
+}
+main();

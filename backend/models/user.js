@@ -11,10 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({Post}) {
       // define association here
-      this.hasMany(Post, {foreignKey: 'ownerId', as: 'posts'})
+      this.hasMany(Post, {
+        foreignKey: 'ownerId', 
+        as: 'posts'
+      })
     }
 
-    toJSON( ) {
+    toJSON() {
       return  { ...this.get(), id: undefined}
     }
   }
@@ -31,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate:{
-        notEmpty: {msg: "Nema cannot be empty"},
+        notEmpty: {msg: "Name cannot be empty"},
         notNull: {msg: "Name cannot be null"},
       }
     },
